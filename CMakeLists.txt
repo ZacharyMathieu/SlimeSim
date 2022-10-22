@@ -16,11 +16,16 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        widget.h
-        widget.cpp
+        UI/mainwindow.cpp
+        UI/mainwindow.h
+        UI/mainwindow.ui
+        UI/UserInterface.h
+        UI/WindowInterface.h
+        UI/WindowInterface.cpp
+        UI/MainCanvas.h
+        UI/MainCanvas.cpp
+        UI/OptionsBar.h
+        UI/OptionsBar.cpp
         EnvironmentData.h
         Environment.h
         Environment.cpp
@@ -32,9 +37,6 @@ set(PROJECT_SOURCES
         PheromoneGrid.h
         PheromoneGrid.cpp
         Constants.h
-        UI/UserInterface.h
-        UI/WindowInterface.cpp
-        UI/WindowInterface.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

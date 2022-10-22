@@ -6,22 +6,23 @@
 #define SLIMESIMAPP_WINDOWINTERFACE_H
 
 #include "UserInterface.h"
-#include "widget.h"
+#include "MainCanvas.h"
 #include "Constants.h"
 
-class WindowInterface : public UserInterface {
+class WindowInterface : public UserInterface, public QObject{
 public:
     explicit WindowInterface();
 
-    explicit WindowInterface(Widget* w);
+    explicit WindowInterface(MainCanvas* mc);
 
-    void displayEnvironment() override;
-
-    void physics() override;
+    void refresh() override;
 private:
-    Widget* widget;
+    MainCanvas *mainCanvas;
     int canvasWidth, canvasHeight, pixelWidth, pixelHeight;
-//    QColor* backgroud;
+
+    void displayEnvironment();
+
+    void physics();
 };
 
 

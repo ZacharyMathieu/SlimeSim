@@ -6,16 +6,18 @@
 #include <QWidget>
 #include <QPainter>
 
-class Widget : public QWidget
+class MainCanvas : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Widget(QWidget *parent = nullptr);
-    void animate();
-private:
-    UserInterface* interface;
+    explicit MainCanvas(QWidget *parent = nullptr);
 
     void paintEvent(QPaintEvent *event) override;
+
+    void refresh();
+private:
+    UserInterface *interface;
+    QTimer *timer;
 };
 
 #endif // WIDGET_H

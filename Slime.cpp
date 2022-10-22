@@ -73,31 +73,29 @@ void Slime::moveForward(EnvironmentData* environmentData, PheromoneGrid* grid, s
 #endif
     }
 
+    bool decisionDone = false;
+
 #ifdef SLIME_AVOID_WALLS
-//    if (!avoidWalls(xSpeed, ySpeed, environmentData))
-    avoidWalls(xSpeed, ySpeed, environmentData);
+    decisionDone = avoidWalls(xSpeed, ySpeed, environmentData);
 #endif
-    {
-        bool decisionDone = false;
 
 #ifdef SLIME_SEEK_PHEROMONES
-        if (_seekPheromones) {
-            seekPheromones(environmentData, grid);
-            decisionDone = true;
-        }
+    if (_seekPheromones) {
+        decisionDone = seekPheromones(environmentData, grid);
+    }
 #endif
 
 #ifdef SLIME_ALIGN_DIRECTION
-        if (!decisionDone) {
-            alignDirectionWithNearbySlime(slimes);
-            decisionDone = true;
-        }
+    if (!decisionDone) {
+        decisionDone = alignDirectionWithNearbySlime(slimes);
+    }
 #endif
 
 #ifdef SLIME_BIAS_DIRECTION
+    if (!decisionDone) {
         turnTorwards(SLIME_BIAS_DIRECTION_X, SLIME_BIAS_DIRECTION_Y, SLIME_BIAS_ROTATION_ANGLE);
-#endif
     }
+#endif
 }
 
 bool Slime::avoidWalls(double xSpeed, double ySpeed, EnvironmentData *environmentData) {
@@ -174,7 +172,6 @@ bool Slime::seekPheromones(EnvironmentData *environmentData, PheromoneGrid *pher
 #endif
             }
         }
-        if (pheromoneFound && strongestPheromone == PHEROMONE_MAX_LEVEL) break;
     }
 
     if (pheromoneFound) {

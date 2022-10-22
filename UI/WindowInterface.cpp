@@ -5,26 +5,31 @@
 #include "WindowInterface.h"
 
 #include <QPainter>
+#include <QTimer>
 #include <iostream>
 
 WindowInterface::WindowInterface() : UserInterface() {
 }
 
-WindowInterface::WindowInterface(Widget* w) : WindowInterface() {
-    widget = w;
-    auto s = w->size();
+WindowInterface::WindowInterface(MainCanvas *mc) : WindowInterface() {
+    mainCanvas = mc;
+    auto s = mc->size();
     canvasWidth = s.width();
     canvasHeight = s.height();
     pixelWidth = std::max(s.width() / env->getWidth(), 1);
     pixelHeight = std::max(s.height() / env->getHeight(), 1);
 }
 
+void WindowInterface::physics() {
+    env->physics();
+}
+
 void WindowInterface::displayEnvironment() {
     QPainter painter;
-    painter.begin(widget);
+    painter.begin(mainCanvas);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    painter.fillRect(0, 0, canvasWidth, canvasHeight, QColor(0, 0, 0));
+    painter.fillRect(0, 0, canvasWidth, canvasHeight,DISPLAY_BACKGROUND_COLOR);
 
     int width = env->getWidth();
     int height = env->getHeight();
@@ -67,6 +72,7 @@ void WindowInterface::displayEnvironment() {
     painter.end();
 }
 
-void WindowInterface::physics() {
-    env->physics();
+void WindowInterface::refresh() {
+    physics();
+    displayEnvironment();
 }

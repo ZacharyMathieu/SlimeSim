@@ -16,9 +16,7 @@ public:
         env = new Environment(SLIME_COUNT);
     }
 
-    virtual void displayEnvironment() = 0;
-
-    virtual void physics() = 0;
+    virtual void refresh() = 0;
 protected:
     Environment *env;
 };
