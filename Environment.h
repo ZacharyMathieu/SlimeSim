@@ -23,6 +23,8 @@ public:
 
     explicit Environment(int slimeCount);
 
+    explicit Environment(Environment *base);
+
     int getWidth() const;
 
     int getHeight() const;
@@ -33,11 +35,11 @@ public:
 
     PheromoneGrid *getPheromoneGrid();
 
-    void moveAllSlime();
+    void moveAllSlime(Environment *e);
 
-    void updatePheromones();
+    void updatePheromones(Environment *e);
 
-    void physics();
+    void physics(Environment* e);
 
     void generateRandomSlime(int slimeCount);
 

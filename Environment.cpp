@@ -23,6 +23,15 @@ Environment::Environment(int slimeCount) : Environment() {
     generateRandomSlime(slimeCount);
 }
 
+Environment::Environment(Environment *base) {
+    slimeVector = new std::vector<Slime*>();
+    pheromoneGrid = new PheromoneGrid(GRID_WIDTH, GRID_HEIGHT);
+
+    for (Slime *s : *base->getSlimeVector()) {
+        slimeVector->push_back(s->copy());
+    }
+}
+
 int Environment::getWidth() const {
     return environmentData.width;
 }
@@ -43,33 +52,43 @@ PheromoneGrid *Environment::getPheromoneGrid() {
     return pheromoneGrid;
 }
 
-void Environment::moveAllSlime() {
+void Environment::moveAllSlime(Environment *e) {
     bool seekPheromones = false;
 
-    seekPheromoneTimer++;
+    seekPheromoneTimer = (e->seekPheromoneTimer) + 1;
 
     if (seekPheromoneTimer % SLIME_SEEK_PHEROMONE_PERIOD == 0) {
         seekPheromones = true;
         seekPheromoneTimer = 0;
     }
 
-    for (Slime *slime: *slimeVector) {
-        slime->moveForward(&environmentData, pheromoneGrid, getSlimeVector(), seekPheromones);
+    std::vector<Slime*> *newSlimeVector = e->getSlimeVector();
+    PheromoneGrid *newPheromoneGrid = e->getPheromoneGrid();
+
+    for (int i = 0; i < slimeVector->size(); i++) {
+        slimeVector->at(i)->copyValues(newSlimeVector->at(i));
+        slimeVector->at(i)->moveForward(&environmentData, newPheromoneGrid, newSlimeVector, seekPheromones);
     }
 }
 
-void Environment::updatePheromones() {
-    for (Slime *slime: *slimeVector) {
-        pheromoneGrid->addSlimeLevel((int) slime->getX(), (int) slime->getY());
+void Environment::updatePheromones(Environment *e) {
+    std::vector<Slime*> *newSlimeVector = e->getSlimeVector();
+    PheromoneGrid *newPheromoneGrid = e->getPheromoneGrid();
+
+    for (Slime *slime: *newSlimeVector) {
+        pheromoneGrid->setSlimeLevel((int) slime->getX(), (int) slime->getY(),
+                                     newPheromoneGrid->getSlimeLevel((int) slime->getX(), (int) slime->getY())
+                                     + SLIME_PHEROMONE_LEVEL);
         pheromoneGrid->setSlimeId((int) slime->getX(), (int) slime->getY(), slime->getId());
     }
 
     pheromoneGrid->update();
 }
 
-void Environment::physics() {
-    moveAllSlime();
-    updatePheromones();
+void Environment::physics(Environment *e) {
+    // TODO Fix this bitch
+    moveAllSlime(e);
+//    updatePheromones(e);
 }
 
 void Environment::generateRandomSlime(int slimeCount) {

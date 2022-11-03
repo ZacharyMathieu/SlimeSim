@@ -18,7 +18,9 @@ public:
 
     void update();
 
-    void addSlimeLevel(int x, int y);
+    void setSlimeLevel(int x, int y, int level);
+
+    int getSlimeLevel(int x, int y);
 
     void setSlimeId(int x, int y, long id);
 

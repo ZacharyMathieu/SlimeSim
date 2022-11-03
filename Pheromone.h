@@ -15,7 +15,7 @@ public:
 
     long slimeId;
 
-    void addSlimeLevel();
+    void setSlimeLevel(int level);
 
     void diffuse();
 

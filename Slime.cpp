@@ -20,9 +20,20 @@ Slime::Slime(long _id) {
     lastSlimeAligned = nullptr;
 }
 
+Slime::Slime(long _id, double _x, double _y, double _angle, double _speed) : Slime(_id){
+    x = _x;
+    y = _y;
+    angle = _angle;
+    speed = _speed;
+}
+
 double Slime::getX() const { return x; }
 
 double Slime::getY() const { return y; }
+
+double Slime::getAngle() const { return angle; }
+
+double Slime::getSpeed() const { return speed; }
 
 long Slime::getId() const { return id; }
 
@@ -32,10 +43,21 @@ Slime *Slime::generateRandom(EnvironmentData* environmentData, long _id) {
     return s;
 }
 
+Slime *Slime::copy() {
+    return new Slime(id, x, y, angle, speed);
+}
+
 void Slime::setRandomValues(EnvironmentData* environmentData) {
     x = Random::getRandomDouble() * (environmentData->width - 1);
     y = Random::getRandomDouble() * (environmentData->height - 1);
     angle = Random::getRandomDouble() * (2 * M_PI);
+}
+
+void Slime::copyValues(Slime *slime) {
+    x = slime->getX();
+    x = slime->getY();
+    x = slime->getAngle();
+    x = slime->getSpeed();
 }
 
 void Slime::moveForward(EnvironmentData* environmentData, PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _seekPheromones) {

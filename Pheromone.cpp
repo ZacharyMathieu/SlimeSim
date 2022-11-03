@@ -5,9 +5,9 @@
 #include "Pheromone.h"
 #include "Constants.h"
 
-void Pheromone::addSlimeLevel() {
+void Pheromone::setSlimeLevel(int level) {
     if (active) {
-        level += SLIME_PHEROMONE_LEVEL;
+        level = level;
         if (level > PHEROMONE_MAX_LEVEL) level = PHEROMONE_MAX_LEVEL;
     }
 }

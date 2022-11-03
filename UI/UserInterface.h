@@ -13,12 +13,16 @@
 class UserInterface {
 public:
     explicit UserInterface() {
-        env = new Environment(SLIME_COUNT);
+        readEnv = new Environment(SLIME_COUNT);
+        writeEnv = new Environment(readEnv);
     }
 
     virtual void refresh() = 0;
+
+    virtual void physics() = 0;
 protected:
-    Environment *env;
+    Environment* readEnv;
+    Environment* writeEnv;
 };
 
 #endif //SLIMESIMAPP_USERINTERFACE_H

@@ -16,13 +16,13 @@ public:
     explicit WindowInterface(MainCanvas* mc);
 
     void refresh() override;
+
+    void physics() override;
 private:
     MainCanvas *mainCanvas;
     int canvasWidth, canvasHeight, pixelWidth, pixelHeight;
 
     void displayEnvironment();
-
-    void physics();
 };
 
 

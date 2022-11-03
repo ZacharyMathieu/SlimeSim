@@ -4,7 +4,7 @@
 // TODO fix memory leak
 
 // Window settings
-#define WINDOW_WIDTH                                1400
+#define WINDOW_WIDTH                                700
 #define WINDOW_HEIGHT                               700
 
 // Framerate settings
@@ -21,8 +21,11 @@
 #define DISPLAY_INACTIVE_PHEROMONE_COLOR            QColor(255, 0, 255)
 #define DISPLAY_DEFAULT_PHEROMONE_COLOR(level)      QColor(0, std::min((1 - level) * 2, 1.0) * level * 255, level * 255)
 
+// Physics calculation settings
+#define PHYSICS_CALCULATION_PERIOD_MS               50
+
 // Grid settings
-#define GRID_WIDTH                                  700
+#define GRID_WIDTH                                  350
 #define GRID_HEIGHT                                 350
 #define LOOP_GRID
 
@@ -31,7 +34,7 @@
 #define NATURAL_PHEROMONES_STRENGTH                 PHEROMONE_MAX_LEVEL
 
 // Environment settings
-#define SLIME_COUNT                                 50000
+#define SLIME_COUNT                                 500
 
 // Slime general settings
 #define SLIME_SPEED                                 0.5
@@ -46,7 +49,7 @@
 #define SLIME_SEEK_PHEROMONE_PERIOD                 1
 #define SLIME_PHEROMONE_DETECTION_RANGE             2
 #define SLIME_PHEROMONE_TURN_ANGLE                  0.05
-#define SLIME_PHEROMONE_LEVEL                       5
+#define SLIME_PHEROMONE_LEVEL                      100
 #define SLIME_IGNORE_SELF_PHEROMONE
 
 // Slime direction alignment settings
@@ -65,7 +68,7 @@
 #define SLIME_BIAS_ROTATION_ANGLE                   0.1
 
 // Pheromones settings
-#define PHEROMONE_MAX_LEVEL                         100
+#define PHEROMONE_MAX_LEVEL                         200
 #define PHEROMONE_HIGH_LEVEL_DIFFUSION_MULTIPLIER   0
 #define PHEROMONE_LOW_LEVEL_DIFFUSION_MULTIPLIER    0
 #define PHEROMONE_DIFFUSION_CONSTANT                1

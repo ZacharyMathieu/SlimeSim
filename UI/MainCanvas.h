@@ -15,6 +15,8 @@ public:
     void paintEvent(QPaintEvent *event) override;
 
     void refresh();
+
+    void physics();
 private:
     UserInterface *interface;
     QTimer *timer;

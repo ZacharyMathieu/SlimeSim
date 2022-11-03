@@ -24,8 +24,6 @@ set(PROJECT_SOURCES
         UI/WindowInterface.cpp
         UI/MainCanvas.h
         UI/MainCanvas.cpp
-        UI/OptionsBar.h
-        UI/OptionsBar.cpp
         EnvironmentData.h
         Environment.h
         Environment.cpp

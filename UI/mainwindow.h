@@ -14,10 +14,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void startLoop();
-    void stopLoop();
+    void startDisplayLoop();
+    void stopDisplayLoop();
+    void startPhysicsLoop();
+    void stopPhysicsLoop();
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
+    QTimer *displayTimer;
+    QTimer *physicsTimer;
 };
 #endif // MAINWINDOW_H

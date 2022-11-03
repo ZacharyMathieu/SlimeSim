@@ -16,12 +16,16 @@ WindowInterface::WindowInterface(MainCanvas *mc) : WindowInterface() {
     auto s = mc->size();
     canvasWidth = s.width();
     canvasHeight = s.height();
-    pixelWidth = std::max(s.width() / env->getWidth(), 1);
-    pixelHeight = std::max(s.height() / env->getHeight(), 1);
+    pixelWidth = std::max(s.width() / readEnv->getWidth(), 1);
+    pixelHeight = std::max(s.height() / readEnv->getHeight(), 1);
 }
 
 void WindowInterface::physics() {
-    env->physics();
+    writeEnv->physics(readEnv);
+
+    Environment *temp = readEnv;
+    readEnv = writeEnv;
+    writeEnv = temp;
 }
 
 void WindowInterface::displayEnvironment() {
@@ -31,10 +35,10 @@ void WindowInterface::displayEnvironment() {
 
     painter.fillRect(0, 0, canvasWidth, canvasHeight,DISPLAY_BACKGROUND_COLOR);
 
-    int width = env->getWidth();
-    int height = env->getHeight();
+    int width = readEnv->getWidth();
+    int height = readEnv->getHeight();
 
-    auto pg = env->getPheromoneGrid()->getGrid();
+    auto pg = readEnv->getPheromoneGrid()->getGrid();
 
 #ifdef DISPLAY_PHEROMONES
     for (int y = 0; y < height; y++) {
@@ -63,7 +67,7 @@ void WindowInterface::displayEnvironment() {
 #endif
 
 #ifdef DISPLAY_SLIME
-    for (Slime *slime : *env->getSlimeVector()) {
+    for (Slime *slime : *readEnv->getSlimeVector()) {
         painter.fillRect(slime->getX() * pixelWidth, slime->getY() * pixelHeight, DISPLAY_SLIME_SIZE, DISPLAY_SLIME_SIZE,
                          DISPLAY_SLIME_COLOR);
     }
@@ -73,6 +77,5 @@ void WindowInterface::displayEnvironment() {
 }
 
 void WindowInterface::refresh() {
-    physics();
     displayEnvironment();
 }

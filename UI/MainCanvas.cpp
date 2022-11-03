@@ -19,6 +19,9 @@ void MainCanvas::paintEvent(QPaintEvent *event) {
 }
 
 void MainCanvas::refresh() {
-//    interface
     update();
+}
+
+void MainCanvas::physics() {
+    interface->physics();
 }
