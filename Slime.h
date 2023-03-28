@@ -17,8 +17,6 @@ private :
 
     Slime *lastSlimeAligned;
 
-    Slime(long _id, double _x, double _y, double _angle, double _speed);
-
     void turn(bool canBeRandom, double angle);
 
     void turnToAngle(bool canBeRandom, double angle, double maxTurnAngle);
@@ -35,23 +33,15 @@ private :
 public:
     Slime(long _id);
 
-    Slime *copy();
-
     double getX() const;
 
     double getY() const;
-
-    double getAngle() const;
-
-    double getSpeed() const;
 
     long getId() const;
 
     static Slime *generateRandom(EnvironmentData *environmentData, long _id);
 
     void setRandomValues(EnvironmentData *environmentData);
-
-    void copyValues(Slime *slime);
 
     void moveForward(EnvironmentData *environmentData, PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _seekPheromones);
 

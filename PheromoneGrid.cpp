@@ -36,12 +36,8 @@ void PheromoneGrid::update() {
     }
 }
 
-void PheromoneGrid::setSlimeLevel(int x, int y, int level) {
-    grid->at(y).at(x)->setSlimeLevel(level);
-}
-
-int PheromoneGrid::getSlimeLevel(int x, int y) {
-    return grid->at(y).at(x)->level;
+void PheromoneGrid::addSlimeLevel(int x, int y) {
+    grid->at(y).at(x)->addSlimeLevel();
 }
 
 void PheromoneGrid::setSlimeId(int x, int y, long id) {

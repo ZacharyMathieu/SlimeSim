@@ -23,8 +23,6 @@ public:
 
     explicit Environment(int slimeCount);
 
-    explicit Environment(Environment *base);
-
     int getWidth() const;
 
     int getHeight() const;
@@ -35,15 +33,19 @@ public:
 
     PheromoneGrid *getPheromoneGrid();
 
-    void moveAllSlime(Environment *e);
+    void moveAllSlime();
 
-    void updatePheromones(Environment *e);
+    void updatePheromones();
 
-    void physics(Environment* e);
+    void physics();
 
     void generateRandomSlime(int slimeCount);
 
     std::string getInfoString(int spacingCount);
+
+    void updateParametersFromString(std::string params);
+
+    void setEnvironmentHeight(int height);
 };
 
 #endif //SLIMESIM_ENVIRONMENT_H
