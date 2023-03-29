@@ -5,6 +5,8 @@
 #ifndef SLIMESIMAPP_PHEROMONE_H
 #define SLIMESIMAPP_PHEROMONE_H
 
+#include "EnvironmentData.h"
+
 #include <string>
 
 class Pheromone {
@@ -12,6 +14,8 @@ public:
     double level = 0;
     bool active = true;
     bool needHighlight = false;
+
+    Pheromone(EnvironmentData *data);
 
     long slimeId;
 
@@ -24,6 +28,8 @@ public:
     bool lowlight();
 
     void deactivate();
+private:
+    EnvironmentData *envData;
 };
 
 

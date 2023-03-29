@@ -3,6 +3,7 @@
 
 #include "UI/Controller.h"
 #include "UI/Widget.h"
+
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE

@@ -17,21 +17,23 @@ private :
 
     Slime *lastSlimeAligned;
 
+    EnvironmentData *envData;
+
     void turn(bool canBeRandom, double angle);
 
     void turnToAngle(bool canBeRandom, double angle, double maxTurnAngle);
 
     void turnTorwards(int targetX, int targetY, double angle);
 
-    bool seekPheromones(EnvironmentData *environmentData, PheromoneGrid *grid);
+    bool seekPheromones(PheromoneGrid *grid);
 
-    bool avoidWalls(double xSpeed, double ySpeed, EnvironmentData *environmentData);
+    bool avoidWalls(double xSpeed, double ySpeed);
 
     bool alignDirectionWithNearbySlime(std::vector<Slime*> *slimes);
 
     void alignDirectionWithSlime(Slime *slime);
 public:
-    Slime(long _id);
+    Slime(long _id, EnvironmentData *data);
 
     double getX() const;
 
@@ -39,11 +41,11 @@ public:
 
     long getId() const;
 
-    static Slime *generateRandom(EnvironmentData *environmentData, long _id);
+    static Slime *generateRandom(long _id, EnvironmentData *data);
 
-    void setRandomValues(EnvironmentData *environmentData);
+    void setRandomValues();
 
-    void moveForward(EnvironmentData *environmentData, PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _seekPheromones);
+    void moveForward(PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _seekPheromones);
 
     std::string getInfoString(int spacingCount) const;
 };

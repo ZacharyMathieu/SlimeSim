@@ -11,11 +11,12 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow) {
-    Environment *env = new Environment(SLIME_COUNT);
+    Environment *env = new Environment();
 
     Widget *canvas = new Widget(this, env);
 
     controller = new Controller(canvas, env);
+    updateParameters();
 
     setCentralWidget(canvas);
 
@@ -51,7 +52,7 @@ void MainWindow::stopCanvasTimer() {
 void MainWindow::startParameterUpdateTimer() {
     parameterUpdateTimer = new QTimer(this);
     connect(parameterUpdateTimer, &QTimer::timeout, this, &MainWindow::updateParameters);
-    parameterUpdateTimer->start(1000);
+    parameterUpdateTimer->start(250);
 }
 
 void MainWindow::stopParameterUpdateTimer() {

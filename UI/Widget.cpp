@@ -1,5 +1,4 @@
 #include "UI/Widget.h"
-#include "UI/Controller.h"
 
 #include <iostream>
 
@@ -8,6 +7,7 @@
 Widget::Widget(QWidget *parent, Environment *environment) : QWidget{parent} {
     setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     env = environment;
+    envData = env->getEnvironmentData();
     canvasWidth = this->width();
     canvasHeight = this->height();
     pixelWidth = std::max(this->width() / env->getWidth(), 1);
@@ -26,38 +26,40 @@ void Widget::paintEvent(QPaintEvent *event) {
 
     auto pg = env->getPheromoneGrid()->getGrid();
 
-#ifdef DISPLAY_PHEROMONES
-    for (int y = 0; y < envHeight; y++) {
-        for (int x = 0; x < envWidth; x++) {
-            auto p = pg->at(y).at(x);
-            double level = std::max(((double) p->level) / PHEROMONE_MAX_LEVEL, 0.0);
-            QColor color;
-            bool colorSet = false;
+    if (envData->display_pheromones) {
+        for (int y = 0; y < envHeight; y++) {
+            for (int x = 0; x < envWidth; x++) {
+                auto p = pg->at(y).at(x);
+                double level = std::max(((double) p->level) / envData->pheromone_max_level, 0.0);
+                QColor color;
+                bool colorSet = false;
 
-            if (p->lowlight()) {
-                color = DISPLAY_HIGHLIGHT_PHEROMONE_COLOR;
-                colorSet = true;
-            }
-            else if (!p->active) {
-                color = DISPLAY_INACTIVE_PHEROMONE_COLOR;
-                colorSet = true;
-            }
-            else if (level > 0) {
-                color = DISPLAY_DEFAULT_PHEROMONE_COLOR(level);
-                colorSet = true;
-            }
+                if (p->lowlight()) {
+                    color = COLOR_FROM_ARRAY(envData->display_highlight_pheromone_color);
+                    colorSet = true;
+                }
+                else if (!p->active) {
+                    color = COLOR_FROM_ARRAY(envData->display_inactive_pheromone_color);
+                    colorSet = true;
+                }
+                else if (level > 0) {
+                    color = DISPLAY_DEFAULT_PHEROMONE_COLOR(level);
+                    colorSet = true;
+                }
 
-            if (colorSet) painter.fillRect(x * pixelWidth, y * pixelHeight, pixelWidth, pixelHeight, color);
+                if (colorSet) painter.fillRect(x * pixelWidth, y * pixelHeight, pixelWidth, pixelHeight, color);
+            }
         }
     }
-#endif
 
-#ifdef DISPLAY_SLIME
-    for (Slime *slime : *env->getSlimeVector()) {
-        painter.fillRect(slime->getX() * pixelWidth, slime->getY() * pixelHeight, DISPLAY_SLIME_SIZE, DISPLAY_SLIME_SIZE,
-                         DISPLAY_SLIME_COLOR);
+    if (envData->display_slime) {
+        for (Slime *slime : *env->getSlimeVector()) {
+            painter.fillRect(slime->getX() * pixelWidth, slime->getY() * pixelHeight,
+                             envData->display_slime_size,
+                             envData->display_slime_size,
+                             COLOR_FROM_ARRAY(envData->display_slime_color));
+        }
     }
-#endif
 
     painter.end();
 }

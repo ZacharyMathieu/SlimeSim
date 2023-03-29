@@ -4,27 +4,28 @@
 
 #include "PheromoneGrid.h"
 #include "Random.h"
-#include "Constants.h"
 
 #include <iostream>
 
-PheromoneGrid::PheromoneGrid(int width, int height) {
+PheromoneGrid::PheromoneGrid(int width, int height, EnvironmentData *data) {
+    envData = data;
+
     grid = new std::vector<std::vector<Pheromone*>>();
 
     for (int y = 0; y < height; y++) {
         std::vector<Pheromone*> v = std::vector<Pheromone*>();
         for (int x = 0; x < width; x++) {
-            v.push_back(new Pheromone());
+            v.push_back(new Pheromone(envData));
         }
         grid->push_back(v);
     }
 
-    for (int i = 0; i < RANDOM_NATURAL_PHEROMONES_COUNT; i++) {
+    for (int i = 0; i < envData->random_natural_pheromones_count; i++) {
         int x = (int) (Random::getRandomDouble() * width);
         int y = (int) (Random::getRandomDouble() * height);
 
         grid->at(y).at(x)->deactivate();
-        grid->at(y).at(x)->level = NATURAL_PHEROMONES_STRENGTH;
+        grid->at(y).at(x)->level = envData->natural_pheromones_strength;
     }
 }
 

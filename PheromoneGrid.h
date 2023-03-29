@@ -5,6 +5,7 @@
 #ifndef SLIMESIMAPP_PHEROMONEGRID_H
 #define SLIMESIMAPP_PHEROMONEGRID_H
 
+#include "EnvironmentData.h"
 #include "Pheromone.h"
 
 #include <vector>
@@ -13,8 +14,9 @@
 class PheromoneGrid {
 private:
     std::vector<std::vector<Pheromone*>> *grid;
+    EnvironmentData *envData;
 public:
-    explicit PheromoneGrid(int width, int height);
+    explicit PheromoneGrid(int width, int height, EnvironmentData *data);
 
     void update();
 
@@ -24,6 +26,5 @@ public:
 
     std::vector<std::vector<Pheromone*>> *getGrid();
 };
-
 
 #endif //SLIMESIMAPP_PHEROMONEGRID_H

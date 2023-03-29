@@ -2,35 +2,31 @@
 // Created by zwazo on 2022-09-24.
 //
 
-#include <list>
-#include <sstream>
-#include <iostream>
-
 #include "Environment.h"
-#include "Constants.h"
 #include "ParameterReader.h"
 #include "Slime.h"
 
+#include <map>
+#include <vector>
+#include <sstream>
+#include <iostream>
+
 Environment::Environment() {
     slimeVector = new std::vector<Slime*>();
-    pheromoneGrid = new PheromoneGrid(GRID_WIDTH, GRID_HEIGHT);
 
-    environmentData = {
-            .width=GRID_WIDTH,
-            .height=GRID_HEIGHT
-    };
-}
+    envData = {};
 
-Environment::Environment(int slimeCount) : Environment() {
-    generateRandomSlime(slimeCount);
+    pheromoneGrid = new PheromoneGrid(envData.grid_width, envData.grid_height, &envData);
+
+    generateRandomSlime(envData.slime_count);
 }
 
 int Environment::getWidth() const {
-    return environmentData.width;
+    return envData.grid_width;
 }
 
 int Environment::getHeight() const {
-    return environmentData.height;
+    return envData.grid_height;
 }
 
 std::size_t Environment::getSlimeCount() {
@@ -50,13 +46,13 @@ void Environment::moveAllSlime() {
 
     seekPheromoneTimer++;
 
-    if (seekPheromoneTimer % SLIME_SEEK_PHEROMONE_PERIOD == 0) {
+    if (seekPheromoneTimer % envData.slime_seek_pheromones_period == 0) {
         seekPheromones = true;
         seekPheromoneTimer = 0;
     }
 
     for (Slime *slime: *slimeVector) {
-        slime->moveForward(&environmentData, pheromoneGrid, getSlimeVector(), seekPheromones);
+        slime->moveForward(pheromoneGrid, getSlimeVector(), seekPheromones);
     }
 }
 
@@ -76,7 +72,7 @@ void Environment::physics() {
 
 void Environment::generateRandomSlime(int slimeCount) {
     for (long i = 0; i < slimeCount; i++) {
-        slimeVector->push_back(Slime::generateRandom(&environmentData, i));
+        slimeVector->push_back(Slime::generateRandom(i, &envData));
     }
 }
 
@@ -85,8 +81,8 @@ std::string Environment::getInfoString(int spacingCount) {
 
     std::stringstream s = std::stringstream();
     s << spacing << "Environment info:" << std::endl
-      << spacing << " Width: " << environmentData.width << std::endl
-      << spacing << " Height: " << environmentData.height << std::endl
+      << spacing << " Width: " << envData.grid_width << std::endl
+      << spacing << " Height: " << envData.grid_height << std::endl
       << spacing << " Slime count: " << getSlimeCount() << std::endl
       << spacing << " Slime list:" << std::endl << std::endl;
 
@@ -97,6 +93,29 @@ std::string Environment::getInfoString(int spacingCount) {
     return s.str();
 }
 
+void Environment::updateParam(InputParam param) {
+    if (param.name == "grid_width") {
+        if (envData.grid_width != param.valueNumber) {
+            std::cout << "Width set to : [" << param.valueNumber << "]" << std::endl;
+            envData.grid_width = param.valueNumber;
+        }
+    } else if (param.name == "grid_height") {
+        if (envData.grid_height != param.valueNumber) {
+            std::cout << "Height set to : [" << param.valueNumber << "]" << std::endl;
+            envData.grid_height = param.valueNumber;
+        }
+    } else {
+        std::cout << "UNRECOGNIZED PARAMETER: [" << param.name << "]" << std::endl;
+    }
+}
+
 void Environment::updateParameters() {
-    std::list<InputParam> params = ParameterReader::read(PARAMETER_FILE_NAME);
+    std::vector<InputParam> params = ParameterReader::read(PARAMETER_FILE_NAME);
+    for (int i = 0; i < params.size(); i++) {
+        updateParam(params[i]);
+    }
+}
+
+EnvironmentData *Environment::getEnvironmentData() {
+    return &envData;
 }

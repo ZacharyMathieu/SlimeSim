@@ -7,15 +7,16 @@
 
 #include "Slime.h"
 #include "Random.h"
-#include "Constants.h"
 
-Slime::Slime(long _id) {
+Slime::Slime(long _id, EnvironmentData *data) {
     id = _id;
+
+    envData = data;
 
     x = 0;
     y = 0;
     angle = 0;
-    speed = SLIME_SPEED;
+    speed = envData->slime_speed;
 
     lastSlimeAligned = nullptr;
 }
@@ -26,19 +27,19 @@ double Slime::getY() const { return y; }
 
 long Slime::getId() const { return id; }
 
-Slime *Slime::generateRandom(EnvironmentData* environmentData, long _id) {
-    Slime *s = new Slime(_id);
-    s->setRandomValues(environmentData);
+Slime *Slime::generateRandom(long _id, EnvironmentData *data) {
+    Slime *s = new Slime(_id, data);
+    s->setRandomValues();
     return s;
 }
 
-void Slime::setRandomValues(EnvironmentData* environmentData) {
-    x = Random::getRandomDouble() * (environmentData->width - 1);
-    y = Random::getRandomDouble() * (environmentData->height - 1);
+void Slime::setRandomValues() {
+    x = Random::getRandomDouble() * (envData->grid_width - 1);
+    y = Random::getRandomDouble() * (envData->grid_height - 1);
     angle = Random::getRandomDouble() * (2 * M_PI);
 }
 
-void Slime::moveForward(EnvironmentData* environmentData, PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _seekPheromones) {
+void Slime::moveForward(PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _seekPheromones) {
     double xSpeed = speed * cos(angle);
     double ySpeed = speed * sin(angle);
 
@@ -46,92 +47,92 @@ void Slime::moveForward(EnvironmentData* environmentData, PheromoneGrid* grid, s
     y += ySpeed;
 
     if (x < 0) {
-#ifdef LOOP_GRID
-        x += environmentData->width;
-#else
-        x = 0;
-#endif
-    } else if (x >= environmentData->width) {
-#ifdef LOOP_GRID
-        x -= environmentData->width;
-#else
-        x = environmentData->width - 1;
-#endif
+        if (envData->loop_grid) {
+            x += envData->grid_width;
+        } else {
+            x = 0;
+        }
+    } else if (x >= envData->grid_width) {
+        if (envData->loop_grid) {
+            x -= envData->grid_width;
+        } else {
+            x = envData->grid_width - 1;
+        }
     }
 
     if (y < 0) {
-#ifdef LOOP_GRID
-        y += environmentData->height;
-#else
-        y = 0;
-#endif
-    } else if (y >= environmentData->height) {
-#ifdef LOOP_GRID
-        y -= environmentData->height;
-#else
-        y = environmentData->height - 1;
-#endif
+        if (envData->loop_grid) {
+            y += envData->grid_height;
+        } else {
+            y = 0;
+        }
+    } else if (y >= envData->grid_height) {
+        if (envData->loop_grid) {
+            y -= envData->grid_height;
+        } else {
+            y = envData->grid_height - 1;
+        }
     }
 
-#ifdef SLIME_AVOID_WALLS
-//    if (!avoidWalls(xSpeed, ySpeed, environmentData))
-    avoidWalls(xSpeed, ySpeed, environmentData);
-#endif
+    if (envData->slime_avoid_walls) {
+        avoidWalls(xSpeed, ySpeed);
+    }
+
     {
         bool decisionDone = false;
 
-#ifdef SLIME_SEEK_PHEROMONES
-        if (_seekPheromones) {
-            seekPheromones(environmentData, grid);
-            decisionDone = true;
+        if (envData->slime_seek_pheromones) {
+            if (_seekPheromones) {
+                seekPheromones(grid);
+                decisionDone = true;
+            }
         }
-#endif
 
-#ifdef SLIME_ALIGN_DIRECTION
-        if (!decisionDone) {
-            alignDirectionWithNearbySlime(slimes);
-            decisionDone = true;
+        if (envData->slime_align_direction) {
+            if (!decisionDone) {
+                alignDirectionWithNearbySlime(slimes);
+                decisionDone = true;
+            }
         }
-#endif
 
-#ifdef SLIME_BIAS_DIRECTION
-        turnTorwards(SLIME_BIAS_DIRECTION_X, SLIME_BIAS_DIRECTION_Y, SLIME_BIAS_ROTATION_ANGLE);
-#endif
+        if (envData->slime_bias_direction) {
+            turnTorwards(SLIME_BIAS_DIRECTION_X, SLIME_BIAS_DIRECTION_Y, SLIME_BIAS_ROTATION_ANGLE);
+        }
     }
 }
 
-bool Slime::avoidWalls(double xSpeed, double ySpeed, EnvironmentData *environmentData) {
+bool Slime::avoidWalls(double xSpeed, double ySpeed) {
     bool madeTurn = false;
 
-    if (x < SLIME_WALL_DETECTION_RANGE) {
+    if (x < envData->slime_wall_detection_range) {
         madeTurn = true;
-        if (ySpeed >= 0) turn(false, -SLIME_WALL_TURN_ANGLE);
-        else turn(false, SLIME_WALL_TURN_ANGLE);
-    } else if (x > environmentData->width - SLIME_WALL_DETECTION_RANGE) {
+        if (ySpeed >= 0) turn(false, -envData->slime_wall_turn_angle);
+        else turn(false, envData->slime_wall_turn_angle);
+    } else if (x > envData->grid_width - envData->slime_wall_detection_range) {
         madeTurn = true;
-        if (ySpeed >= 0) turn(false, SLIME_WALL_TURN_ANGLE);
-        else turn(false, -SLIME_WALL_TURN_ANGLE);
-    } else if (y < SLIME_WALL_DETECTION_RANGE) {
+        if (ySpeed >= 0) turn(false, envData->slime_wall_turn_angle);
+        else turn(false, -envData->slime_wall_turn_angle);
+    } else if (y < envData->slime_wall_detection_range) {
         madeTurn = true;
-        if (xSpeed >= 0) turn(false, SLIME_WALL_TURN_ANGLE);
-        else turn(false, -SLIME_WALL_TURN_ANGLE);
-    } else if (y > environmentData->height - SLIME_WALL_DETECTION_RANGE) {
+        if (xSpeed >= 0) turn(false, envData->slime_wall_turn_angle);
+        else turn(false, -envData->slime_wall_turn_angle);
+    } else if (y > envData->grid_height - envData->slime_wall_detection_range) {
         madeTurn = true;
-        if (xSpeed >= 0) turn(false, -SLIME_WALL_TURN_ANGLE);
-        else turn(false, SLIME_WALL_TURN_ANGLE);
+        if (xSpeed >= 0) turn(false, -envData->slime_wall_turn_angle);
+        else turn(false, envData->slime_wall_turn_angle);
     }
 
     return madeTurn;
 }
 
-bool Slime::seekPheromones(EnvironmentData *environmentData, PheromoneGrid *pheromoneGrid) {
+bool Slime::seekPheromones(PheromoneGrid *pheromoneGrid) {
     int roundedX = round(x);
-    int minX = std::max(roundedX - SLIME_PHEROMONE_DETECTION_RANGE, 0);
-    int maxX = std::min(roundedX + SLIME_PHEROMONE_DETECTION_RANGE, environmentData->width - 1);
+    int minX = std::max(roundedX - envData->slime_pheromone_detection_range, 0);
+    int maxX = std::min(roundedX + envData->slime_pheromone_detection_range, envData->grid_width - 1);
 
     int roundedY = floor(y);
-    int minY = std::max(roundedY - SLIME_PHEROMONE_DETECTION_RANGE, 0);
-    int maxY = std::min(roundedY + SLIME_PHEROMONE_DETECTION_RANGE, environmentData->height - 1);
+    int minY = std::max(roundedY - envData->slime_pheromone_detection_range, 0);
+    int maxY = std::min(roundedY + envData->slime_pheromone_detection_range, envData->grid_height - 1);
 
     if (M_PI / 4 <= angle && angle < 3 * M_PI / 4) {
         minY = roundedY;
@@ -154,9 +155,7 @@ bool Slime::seekPheromones(EnvironmentData *environmentData, PheromoneGrid *pher
             Pheromone *p = grid->at(iY).at(iX);
 
             if (p->level >= strongestPheromone) {
-#ifdef SLIME_IGNORE_SELF_PHEROMONE
-                if (p->slimeId != id) {
-#endif
+                if (!envData->slime_ignore_self_pheromone || p->slimeId != id) {
                     if (pheromoneFound && p->level == strongestPheromone) {
                         double newDistance = sqrt(pow(iX - x, 2) + pow(iY - y, 2));
                         if (strongestPheromoneDistance < newDistance) {
@@ -169,25 +168,23 @@ bool Slime::seekPheromones(EnvironmentData *environmentData, PheromoneGrid *pher
                         strongestPheromonePos = std::make_pair(iX, iY);
                         strongestPheromoneDistance = sqrt(pow(strongestPheromonePos.first - x, 2) + pow(strongestPheromonePos.second - y, 2));
                     }
-#ifdef SLIME_IGNORE_SELF_PHEROMONE
                 }
-#endif
             }
         }
-        if (pheromoneFound && strongestPheromone == PHEROMONE_MAX_LEVEL) break;
+        if (pheromoneFound && strongestPheromone == envData->pheromone_max_level) break;
     }
 
     if (pheromoneFound) {
-        turnTorwards(strongestPheromonePos.first, strongestPheromonePos.second, SLIME_PHEROMONE_TURN_ANGLE);
+        turnTorwards(strongestPheromonePos.first, strongestPheromonePos.second, envData->slime_pheromone_turn_angle);
     }
 
     return pheromoneFound;
 }
 
 void Slime::turn(bool canBeRandom, double turnAngle) {
-    if (canBeRandom && Random::getRandomBool(SLIME_RANDOM_ROTATION_CHANCE)) {
-        if (Random::getRandomBool(0.5)) angle += SLIME_RANDOM_ROTATION_CHANCE;
-        else angle -= SLIME_RANDOM_ROTATION_CHANCE;
+    if (canBeRandom && Random::getRandomBool(envData->slime_random_rotation_chance)) {
+        if (Random::getRandomBool(0.5)) angle += envData->slime_random_rotation_chance;
+        else angle -= envData->slime_random_rotation_chance;
     } else angle += turnAngle;
 
     if (2 * M_PI < angle){
@@ -232,20 +229,13 @@ void Slime::turnTorwards(int targetX, int targetY, double maxAngle) {
 bool Slime::alignDirectionWithNearbySlime(std::vector<Slime*> *slimes) {
     bool slimeFound = false;
 
-//    if (lastSlimeAligned != nullptr) {
-//        if (sqrt(pow(std::abs(x - lastSlimeAligned->getX()), 2) + pow(std::abs(y - lastSlimeAligned->getY()), 2)) <= SLIME_OTHER_DETECTION_RANGE) {
-//            slimeFound = true;
-//            alignDirectionWithSlime(lastSlimeAligned);
-//        }
-//    }
-
     if (!slimeFound) {
         for (Slime* pS : *slimes) {
             double dX = std::abs(x - pS->getX());
             double dY = std::abs(y - pS->getY());
 
-            if (dX < SLIME_OTHER_DETECTION_RANGE && dY < SLIME_OTHER_DETECTION_RANGE) {
-                if (sqrt((dX * dX) + (dY * dY)) <= SLIME_OTHER_DETECTION_RANGE) {
+            if (dX < envData->slime_other_detection_range && dY < envData->slime_other_detection_range) {
+                if (sqrt((dX * dX) + (dY * dY)) <= envData->slime_other_detection_range) {
                     if (pS != this) {
                         slimeFound = true;
                         lastSlimeAligned = pS;
@@ -265,7 +255,8 @@ bool Slime::alignDirectionWithNearbySlime(std::vector<Slime*> *slimes) {
 }
 
 void Slime::alignDirectionWithSlime(Slime *slime) {
-    turnToAngle(true, slime->angle, SLIME_ALIGN_TURN_ANGLE);
+//    turnToAngle(true, slime->angle, envData->slime_align_turn_angle);
+    turnToAngle(true, slime->angle, 0.1);
 }
 
 std::string Slime::getInfoString(int spacingCount) const {

@@ -3,7 +3,10 @@
 //
 
 #include "Pheromone.h"
-#include "Constants.h"
+
+Pheromone::Pheromone(EnvironmentData *data) {
+    envData = data;
+}
 
 void Pheromone::addSlimeLevel() {
     if (active) {

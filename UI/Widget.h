@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include "Environment.h"
+
 #include <QWidget>
 #include <QPainter>
 
@@ -12,6 +13,7 @@ public:
     Widget(QWidget *parent = nullptr, Environment *environment = nullptr);
 private:
     Environment *env;
+    EnvironmentData *envData;
     int canvasWidth, canvasHeight, pixelWidth, pixelHeight;
 
     void paintEvent(QPaintEvent *event) override;

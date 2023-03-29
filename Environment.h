@@ -8,20 +8,21 @@
 #include <vector>
 #include <string>
 
+#include "ParameterReader.h"
 #include "Slime.h"
 #include "EnvironmentData.h"
 #include "PheromoneGrid.h"
 
 class Environment {
 private:
-    EnvironmentData environmentData{};
+    EnvironmentData envData{};
     std::vector<Slime*> *slimeVector;
     PheromoneGrid *pheromoneGrid;
     long seekPheromoneTimer = 0;
+
+    void updateParam(InputParam param);
 public:
     explicit Environment();
-
-    explicit Environment(int slimeCount);
 
     int getWidth() const;
 
@@ -44,6 +45,8 @@ public:
     std::string getInfoString(int spacingCount);
 
     void updateParameters();
+
+    EnvironmentData *getEnvironmentData();
 };
 
 #endif //SLIMESIM_ENVIRONMENT_H
