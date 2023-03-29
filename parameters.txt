@@ -1,11 +1,11 @@
-display_pheromones true
+display_pheromones false
 display_slime true
 display_slime_size 1
 display_slime_opacity 75
 display_slime_color 255,255,0
 display_highlight_pheromone_color 0,255,0
 display_inactive_pheromone_color 255,0,255
-grid_width 400
+grid_width 500
 grid_height 200
 loop_grid true
 random_natural_pheromones_count 0

@@ -94,15 +94,176 @@ std::string Environment::getInfoString(int spacingCount) {
 }
 
 void Environment::updateParam(InputParam param) {
-    if (param.name == "grid_width") {
+    if (param.name == "display_pheromones") {
+        if (envData.display_pheromones != param.valueBool) {
+            std::cout << "display_pheromones set to : [" << param.valueBool << "]" << std::endl;
+            envData.display_pheromones = param.valueBool;
+        }
+    } else if (param.name == "display_slime") {
+        if (envData.display_slime != param.valueBool) {
+            std::cout << "display_slime set to : [" << param.valueBool << "]" << std::endl;
+            envData.display_slime = param.valueBool;
+        }
+    } else if (param.name == "display_slime_size") {
+        if (envData.display_slime_size != param.valueNumber) {
+            std::cout << "display_slime_size set to : [" << param.valueNumber << "]" << std::endl;
+            envData.display_slime_size = param.valueNumber;
+        }
+    } else if (param.name == "display_slime_opacity") {
+        if (envData.display_slime_opacity != param.valueNumber) {
+            std::cout << "display_slime_opacity set to : [" << param.valueNumber << "]" << std::endl;
+            envData.display_slime_opacity = param.valueNumber;
+        }
+    } else if (param.name == "display_slime_color") {
+//        std::cout << "display_slime_color not yet implemented" << std::endl;
+    } else if (param.name == "display_highlight_pheromone_color") {
+//        std::cout << "display_highlight_pheromone_color not yet implemented" << std::endl;
+    } else if (param.name == "display_inactive_pheromone_color") {
+//        std::cout << "display_inactive_pheromone_color not yet implemented" << std::endl;
+    } else if (param.name == "grid_width") {
         if (envData.grid_width != param.valueNumber) {
-            std::cout << "Width set to : [" << param.valueNumber << "]" << std::endl;
+            std::cout << "grid_width set to : [" << param.valueNumber << "]" << std::endl;
             envData.grid_width = param.valueNumber;
         }
     } else if (param.name == "grid_height") {
         if (envData.grid_height != param.valueNumber) {
-            std::cout << "Height set to : [" << param.valueNumber << "]" << std::endl;
+            std::cout << "grid_height set to : [" << param.valueNumber << "]" << std::endl;
             envData.grid_height = param.valueNumber;
+        }
+    } else if (param.name == "loop_grid") {
+        if (envData.loop_grid != param.valueBool) {
+            std::cout << "loop_grid set to : [" << param.valueBool << "]" << std::endl;
+            envData.loop_grid = param.valueBool;
+        }
+    } else if (param.name == "random_natural_pheromones_count") {
+        if (envData.random_natural_pheromones_count != param.valueNumber) {
+            std::cout << "random_natural_pheromones_count set to : [" << param.valueNumber << "]" << std::endl;
+            envData.random_natural_pheromones_count = param.valueNumber;
+        }
+    } else if (param.name == "natural_pheromones_strength") {
+        if (envData.natural_pheromones_strength != param.valueNumber) {
+            std::cout << "natural_pheromones_strength set to : [" << param.valueNumber << "]" << std::endl;
+            envData.natural_pheromones_strength = param.valueNumber;
+        }
+    } else if (param.name == "slime_count") {
+        if (envData.slime_count != param.valueNumber) {
+            std::cout << "slime_count set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_count = param.valueNumber;
+        }
+    } else if (param.name == "slime_avoid_walls") {
+        if (envData.slime_avoid_walls != param.valueBool) {
+            std::cout << "slime_avoid_walls set to : [" << param.valueBool << "]" << std::endl;
+            envData.slime_avoid_walls = param.valueBool;
+        }
+    } else if (param.name == "slime_wall_detection_range") {
+        if (envData.slime_wall_detection_range != param.valueNumber) {
+            std::cout << "slime_wall_detection_range set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_wall_detection_range = param.valueNumber;
+        }
+    } else if (param.name == "slime_wall_turn_angle") {
+        if (envData.slime_wall_turn_angle != param.valueNumber) {
+            std::cout << "slime_wall_turn_angle set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_wall_turn_angle = param.valueNumber;
+        }
+    } else if (param.name == "slime_seek_pheromones") {
+        if (envData.slime_seek_pheromones != param.valueBool) {
+            std::cout << "slime_seek_pheromones set to : [" << param.valueBool << "]" << std::endl;
+            envData.slime_seek_pheromones = param.valueBool;
+        }
+    } else if (param.name == "slime_seek_pheromones_period") {
+        if (envData.slime_seek_pheromones_period != param.valueNumber) {
+            std::cout << "slime_seek_pheromones_period set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_seek_pheromones_period = param.valueNumber;
+        }
+    } else if (param.name == "slime_pheromone_detection_range") {
+        if (envData.slime_pheromone_detection_range != param.valueNumber) {
+            std::cout << "slime_pheromone_detection_range set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_pheromone_detection_range = param.valueNumber;
+        }
+    } else if (param.name == "slime_pheromone_turn_angle") {
+        if (envData.slime_pheromone_turn_angle != param.valueNumber) {
+            std::cout << "slime_pheromone_turn_angle set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_pheromone_turn_angle = param.valueNumber;
+        }
+    } else if (param.name == "slime_pheromone_level") {
+        if (envData.slime_pheromone_level != param.valueNumber) {
+            std::cout << "slime_pheromone_level set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_pheromone_level = param.valueNumber;
+        }
+    } else if (param.name == "slime_ignore_self_pheromone") {
+        if (envData.slime_ignore_self_pheromone != param.valueBool) {
+            std::cout << "slime_ignore_self_pheromone set to : [" << param.valueBool << "]" << std::endl;
+            envData.slime_ignore_self_pheromone = param.valueBool;
+        }
+    } else if (param.name == "slime_align_direction") {
+        if (envData.slime_align_direction != param.valueBool) {
+            std::cout << "slime_align_direction set to : [" << param.valueBool << "]" << std::endl;
+            envData.slime_align_direction = param.valueBool;
+        }
+    } else if (param.name == "slime_other_detection_range") {
+        if (envData.slime_other_detection_range != param.valueNumber) {
+            std::cout << "slime_other_detection_range set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_other_detection_range = param.valueNumber;
+        }
+    } else if (param.name == "slime_align_turn_angle") {
+        if (envData.slime_align_turn_angle != param.valueNumber) {
+            std::cout << "slime_align_turn_angle set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_align_turn_angle = param.valueNumber;
+        }
+    } else if (param.name == "slime_random_rotation_chance") {
+        if (envData.slime_random_rotation_chance != param.valueNumber) {
+            std::cout << "slime_random_rotation_chance set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_random_rotation_chance = param.valueNumber;
+        }
+    } else if (param.name == "slime_random_rotation_angle") {
+        if (envData.slime_random_rotation_angle != param.valueNumber) {
+            std::cout << "slime_random_rotation_angle set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_random_rotation_angle = param.valueNumber;
+        }
+    } else if (param.name == "slime_bias_direction") {
+        if (envData.slime_bias_direction != param.valueBool) {
+            std::cout << "slime_bias_direction set to : [" << param.valueBool << "]" << std::endl;
+            envData.slime_bias_direction = param.valueBool;
+        }
+    } else if (param.name == "slime_bias_direction_x") {
+        if (envData.slime_bias_direction_x != param.valueNumber) {
+            std::cout << "slime_bias_direction_x set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_bias_direction_x = param.valueNumber;
+        }
+    } else if (param.name == "slime_bias_direction_y") {
+        if (envData.slime_bias_direction_y != param.valueNumber) {
+            std::cout << "slime_bias_direction_y set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_bias_direction_y = param.valueNumber;
+        }
+    } else if (param.name == "slime_bias_rotation_angle") {
+        if (envData.slime_bias_rotation_angle != param.valueNumber) {
+            std::cout << "slime_bias_rotation_angle set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_bias_rotation_angle = param.valueNumber;
+        }
+    } else if (param.name == "pheromone_max_level") {
+        if (envData.pheromone_max_level != param.valueNumber) {
+            std::cout << "pheromone_max_level set to : [" << param.valueNumber << "]" << std::endl;
+            envData.pheromone_max_level = param.valueNumber;
+        }
+    } else if (param.name == "pheromone_high_level_diffusion_multiplier") {
+        if (envData.pheromone_high_level_diffusion_multiplier != param.valueNumber) {
+            std::cout << "pheromone_high_level_diffusion_multiplier set to : [" << param.valueNumber << "]" << std::endl;
+            envData.pheromone_high_level_diffusion_multiplier = param.valueNumber;
+        }
+    } else if (param.name == "pheromone_low_level_diffusion_multiplier") {
+        if (envData.pheromone_low_level_diffusion_multiplier != param.valueNumber) {
+            std::cout << "pheromone_low_level_diffusion_multiplier set to : [" << param.valueNumber << "]" << std::endl;
+            envData.pheromone_low_level_diffusion_multiplier = param.valueNumber;
+        }
+    } else if (param.name == "pheromone_diffusion_constant") {
+        if (envData.pheromone_diffusion_constant != param.valueNumber) {
+            std::cout << "pheromone_diffusion_constant set to : [" << param.valueNumber << "]" << std::endl;
+            envData.pheromone_diffusion_constant = param.valueNumber;
+        }
+    } else if (param.name == "pheromone_max_level_reset_value") {
+        if (envData.pheromone_max_level_reset_value != param.valueNumber) {
+            std::cout << "pheromone_max_level_reset_value set to : [" << param.valueNumber << "]" << std::endl;
+            envData.pheromone_max_level_reset_value = param.valueNumber;
         }
     } else {
         std::cout << "UNRECOGNIZED PARAMETER: [" << param.name << "]" << std::endl;
