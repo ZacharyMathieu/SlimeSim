@@ -10,15 +10,7 @@
 PheromoneGrid::PheromoneGrid(int width, int height, EnvironmentData *data) {
     envData = data;
 
-    grid = new std::vector<std::vector<Pheromone*>>();
-
-    for (int y = 0; y < height; y++) {
-        std::vector<Pheromone*> v = std::vector<Pheromone*>();
-        for (int x = 0; x < width; x++) {
-            v.push_back(new Pheromone(envData));
-        }
-        grid->push_back(v);
-    }
+    updateSize();
 
     for (int i = 0; i < envData->random_natural_pheromones_count; i++) {
         int x = (int) (Random::getRandomDouble() * width);
@@ -47,4 +39,17 @@ void PheromoneGrid::setSlimeId(int x, int y, long id) {
 
 std::vector<std::vector<Pheromone*>> *PheromoneGrid::getGrid() {
     return grid;
+}
+
+void PheromoneGrid::updateSize() {
+    grid = new std::vector<std::vector<Pheromone*>>();
+
+    for (int y = 0; y < envData->grid_height; y++) {
+        std::vector<Pheromone*> v = std::vector<Pheromone*>();
+
+        for (int x = 0; x < envData->grid_width; x++) {
+            v.push_back(new Pheromone(envData));
+        }
+        grid->push_back(v);
+    }
 }

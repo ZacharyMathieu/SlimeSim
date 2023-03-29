@@ -14,9 +14,11 @@ public:
 private:
     Environment *env;
     EnvironmentData *envData;
-    int canvasWidth, canvasHeight, pixelWidth, pixelHeight;
+    int gridWidth, gridHeight, pixelWidth, pixelHeight;
 
     void paintEvent(QPaintEvent *event) override;
+
+    void updatePixelSize();
 };
 
 #endif // WIDGET_H

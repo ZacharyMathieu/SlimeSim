@@ -124,11 +124,13 @@ void Environment::updateParam(InputParam param) {
         if (envData.grid_width != param.valueNumber) {
             std::cout << "grid_width set to : [" << param.valueNumber << "]" << std::endl;
             envData.grid_width = param.valueNumber;
+            pheromoneGrid->updateSize();
         }
     } else if (param.name == "grid_height") {
         if (envData.grid_height != param.valueNumber) {
             std::cout << "grid_height set to : [" << param.valueNumber << "]" << std::endl;
             envData.grid_height = param.valueNumber;
+            pheromoneGrid->updateSize();
         }
     } else if (param.name == "loop_grid") {
         if (envData.loop_grid != param.valueBool) {
@@ -149,6 +151,11 @@ void Environment::updateParam(InputParam param) {
         if (envData.slime_count != param.valueNumber) {
             std::cout << "slime_count set to : [" << param.valueNumber << "]" << std::endl;
             envData.slime_count = param.valueNumber;
+        }
+    } else if (param.name == "slime_speed") {
+        if (envData.slime_speed != param.valueNumber) {
+            std::cout << "slime_speed set to : [" << param.valueNumber << "]" << std::endl;
+            envData.slime_speed = param.valueNumber;
         }
     } else if (param.name == "slime_avoid_walls") {
         if (envData.slime_avoid_walls != param.valueBool) {

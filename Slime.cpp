@@ -16,7 +16,6 @@ Slime::Slime(long _id, EnvironmentData *data) {
     x = 0;
     y = 0;
     angle = 0;
-    speed = envData->slime_speed;
 
     lastSlimeAligned = nullptr;
 }
@@ -40,8 +39,8 @@ void Slime::setRandomValues() {
 }
 
 void Slime::moveForward(PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _seekPheromones) {
-    double xSpeed = speed * cos(angle);
-    double ySpeed = speed * sin(angle);
+    double xSpeed = envData->slime_speed * cos(angle);
+    double ySpeed = envData->slime_speed * sin(angle);
 
     x += xSpeed;
     y += ySpeed;
@@ -83,21 +82,21 @@ void Slime::moveForward(PheromoneGrid* grid, std::vector<Slime*> *slimes, bool _
 
         if (envData->slime_seek_pheromones) {
             if (_seekPheromones) {
-                seekPheromones(grid);
-                decisionDone = true;
+                decisionDone = seekPheromones(grid);
             }
         }
 
-        if (envData->slime_align_direction) {
-            if (!decisionDone) {
-                alignDirectionWithNearbySlime(slimes);
-                decisionDone = true;
+//        if (!decisionDone) {
+            if (envData->slime_align_direction) {
+                decisionDone = alignDirectionWithNearbySlime(slimes);
             }
-        }
+//        }
 
-        if (envData->slime_bias_direction) {
-            turnTorwards(SLIME_BIAS_DIRECTION_X, SLIME_BIAS_DIRECTION_Y, SLIME_BIAS_ROTATION_ANGLE);
-        }
+//        if (!decisionDone) {
+            if (envData->slime_bias_direction) {
+                turnTorwards(envData->slime_bias_direction_x, envData->slime_bias_direction_y, envData->slime_bias_rotation_angle);
+            }
+//        }
     }
 }
 
@@ -255,8 +254,7 @@ bool Slime::alignDirectionWithNearbySlime(std::vector<Slime*> *slimes) {
 }
 
 void Slime::alignDirectionWithSlime(Slime *slime) {
-//    turnToAngle(true, slime->angle, envData->slime_align_turn_angle);
-    turnToAngle(true, slime->angle, 0.1);
+    turnToAngle(true, slime->angle, envData->slime_align_turn_angle);
 }
 
 std::string Slime::getInfoString(int spacingCount) const {
@@ -267,7 +265,7 @@ std::string Slime::getInfoString(int spacingCount) const {
       << spacing << " X: " << x << std::endl
       << spacing << " Y: " << y << std::endl
       << spacing << " Angle: " << angle << std::endl
-      << spacing << " Speed: " << speed << std::endl;
+      << spacing << " Speed: " << envData->slime_speed << std::endl;
 
     return s.str();
 }

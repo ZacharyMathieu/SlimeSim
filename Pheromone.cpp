@@ -10,17 +10,17 @@ Pheromone::Pheromone(EnvironmentData *data) {
 
 void Pheromone::addSlimeLevel() {
     if (active) {
-        level += SLIME_PHEROMONE_LEVEL;
-        if (level > PHEROMONE_MAX_LEVEL) level = PHEROMONE_MAX_LEVEL;
+        level += envData->slime_pheromone_level;
+        if (level > envData->pheromone_max_level) level = envData->pheromone_max_level;
     }
 }
 
 void Pheromone::diffuse() {
     if (active && level > 0) {
-        if (PHEROMONE_MAX_LEVEL < level) level = PHEROMONE_MAX_LEVEL_RESET_VALUE;
-        level -= PHEROMONE_LOW_LEVEL_DIFFUSION_MULTIPLIER * ((1 / (level + 1)) - (1 / (PHEROMONE_LOW_LEVEL_DIFFUSION_MULTIPLIER + 1)));
-        level -= (PHEROMONE_HIGH_LEVEL_DIFFUSION_MULTIPLIER * (level / PHEROMONE_MAX_LEVEL)) / PHEROMONE_MAX_LEVEL;
-        level -= PHEROMONE_DIFFUSION_CONSTANT;
+        if (envData->pheromone_max_level < level) level = PHEROMONE_MAX_LEVEL_RESET_VALUE;
+        level -= envData->pheromone_low_level_diffusion_multiplier * ((1 / (level + 1)) - (1 / (envData->pheromone_low_level_diffusion_multiplier + 1)));
+        level -= (envData->pheromone_high_level_diffusion_multiplier * (level / envData->pheromone_max_level)) / envData->pheromone_max_level;
+        level -= envData->pheromone_diffusion_constant;
         if (level < 0) level = 0;
     }
 }

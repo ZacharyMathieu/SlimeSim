@@ -25,6 +25,8 @@ public:
     void setSlimeId(int x, int y, long id);
 
     std::vector<std::vector<Pheromone*>> *getGrid();
+
+    void updateSize();
 };
 
 #endif //SLIMESIMAPP_PHEROMONEGRID_H

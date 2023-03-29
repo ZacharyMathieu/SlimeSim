@@ -38,7 +38,7 @@ struct EnvironmentData {
     int slime_other_detection_range = SLIME_OTHER_DETECTION_RANGE;
     double slime_align_turn_angle = SLIME_ALIGN_TURN_ANGLE;
     double slime_random_rotation_chance = SLIME_RANDOM_ROTATION_CHANCE;
-    int slime_random_rotation_angle = SLIME_RANDOM_ROTATION_ANGLE;
+    double slime_random_rotation_angle = SLIME_RANDOM_ROTATION_ANGLE;
     bool slime_bias_direction = SLIME_BIAS_DIRECTION;
     int slime_bias_direction_x = SLIME_BIAS_DIRECTION_X;
     int slime_bias_direction_y = SLIME_BIAS_DIRECTION_Y;

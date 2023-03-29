@@ -12,7 +12,7 @@
 
 class Slime {
 private :
-    double x, y, angle, speed;
+    double x, y, angle;
     long id;
 
     Slime *lastSlimeAligned;

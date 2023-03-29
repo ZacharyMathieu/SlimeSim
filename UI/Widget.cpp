@@ -1,17 +1,22 @@
 #include "UI/Widget.h"
+#include "Constants.h"
 
 #include <iostream>
-
-#include "Constants.h"
 
 Widget::Widget(QWidget *parent, Environment *environment) : QWidget{parent} {
     setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     env = environment;
     envData = env->getEnvironmentData();
-    canvasWidth = this->width();
-    canvasHeight = this->height();
-    pixelWidth = std::max(this->width() / env->getWidth(), 1);
-    pixelHeight = std::max(this->height() / env->getHeight(), 1);
+    updatePixelSize();
+}
+
+void Widget::updatePixelSize() {
+    gridWidth = env->getWidth();
+    gridHeight = env->getHeight();
+    pixelWidth = std::max(WINDOW_WIDTH / gridWidth, 1);
+    pixelHeight = std::max(WINDOW_HEIGHT / gridHeight, 1);
+//    pixelWidth = 1;
+//    pixelHeight = 1;
 }
 
 void Widget::paintEvent(QPaintEvent *event) {
@@ -19,7 +24,7 @@ void Widget::paintEvent(QPaintEvent *event) {
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    painter.fillRect(0, 0, canvasWidth, canvasHeight, QColor(0, 0, 0));
+    painter.fillRect(0, 0, this->width(), this->height(), QColor(0, 0, 0));
 
     int envWidth = env->getWidth();
     int envHeight = env->getHeight();
