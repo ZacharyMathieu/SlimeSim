@@ -67,4 +67,7 @@
 #define PHEROMONE_DIFFUSION_CONSTANT                5
 #define PHEROMONE_MAX_LEVEL_RESET_VALUE             PHEROMONE_MAX_LEVEL
 
+// Parameters settings
+#define PARAMETER_FILE_NAME                         "parameters.txt"
+
 #endif // CONSTANTS_H

@@ -2,11 +2,13 @@
 // Created by zwazo on 2022-09-24.
 //
 
+#include <list>
 #include <sstream>
 #include <iostream>
 
 #include "Environment.h"
 #include "Constants.h"
+#include "ParameterReader.h"
 #include "Slime.h"
 
 Environment::Environment() {
@@ -95,6 +97,6 @@ std::string Environment::getInfoString(int spacingCount) {
     return s.str();
 }
 
-void Environment::updateParametersFromString(std::string params) {
-    std::cout << "(environment) UPDATE PARAMETERS" << std::endl;
+void Environment::updateParameters() {
+    std::list<InputParam> params = ParameterReader::read(PARAMETER_FILE_NAME);
 }

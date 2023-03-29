@@ -43,9 +43,7 @@ public:
 
     std::string getInfoString(int spacingCount);
 
-    void updateParametersFromString(std::string params);
-
-    void setEnvironmentHeight(int height);
+    void updateParameters();
 };
 
 #endif //SLIMESIM_ENVIRONMENT_H

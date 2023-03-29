@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
         Pheromone.cpp
         PheromoneGrid.h
         PheromoneGrid.cpp
+        ParameterReader.h
+        ParameterReader.cpp
         Constants.h
         UI/MainWindow.h
         UI/MainWindow.cpp

@@ -25,5 +25,5 @@ void Controller::animate() {
 }
 
 void Controller::updateParameters() {
-    std::cout << "(controller) UPDATE PARAMETERS" << std::endl;
+    env->updateParameters();
 }
